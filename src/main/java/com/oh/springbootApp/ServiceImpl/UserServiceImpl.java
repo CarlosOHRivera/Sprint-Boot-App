@@ -1,6 +1,5 @@
 package com.oh.springbootApp.ServiceImpl;
 
-import com.oh.springbootApp.Entity.User;
 import com.oh.springbootApp.Repository.UserRepository;
 import com.oh.springbootApp.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public Iterable<User> getAllUsers() {
+    //public Iterable<User> getAllUsers() {
+    public Iterable getAllUsers() {
         return userRepository.findAll();
     }
 }

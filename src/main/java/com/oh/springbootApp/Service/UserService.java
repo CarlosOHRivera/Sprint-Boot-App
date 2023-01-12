@@ -2,8 +2,6 @@ package com.oh.springbootApp.Service;
 
 import com.oh.springbootApp.Entity.User;
 
-import java.util.List;
-
 public interface UserService {
     public Iterable<User> getAllUsers();
 }
