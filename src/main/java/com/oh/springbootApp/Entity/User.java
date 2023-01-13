@@ -24,19 +24,24 @@ public class User {
     @Column
     private String password;
 
-    @Transient
+    @Column
+    private String roles;
+
+        @Transient
     private String confirmPassword;
 
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String username, String password, String confirmPassword) {
+    public User(Long id, String firstName, String lastName, String email, String username, String password, String roles, String confirmPassword) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.roles = roles;
         this.confirmPassword = confirmPassword;
     }
 
@@ -56,8 +61,7 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastName() { return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -95,6 +99,16 @@ public class User {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles"
