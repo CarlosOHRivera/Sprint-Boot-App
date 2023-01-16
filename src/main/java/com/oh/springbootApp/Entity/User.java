@@ -1,6 +1,10 @@
 package com.oh.springbootApp.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.apache.logging.log4j.message.Message;
 
 import java.util.List;
 
@@ -14,20 +18,32 @@ public class User {
     private Long id;
 
     @Column
+    @NotBlank
+    @Size(min = 5, max = 60, message = "Debe cumplir con mínimo de Longitud")
     private String firstName;
     @Column
+    @NotBlank(message = "Ingrese Su apellido")
     private String lastName;
+
     @Column(unique = true)
+    @Email(message = "Ingrese una dirección de correo válida")
     private String email;
+
     @Column(unique = true)
+    @NotBlank(message = "Ingrese el Nombre de Usuario")
     private String username;
+
     @Column
+    @NotBlank(message = "Ingrese la Clave")
     private String password;
 
     @Column
     private String roles;
 
-        @Transient
+    @Transient
+    @Column
+    @NotBlank(message = "Ingrese de nuevo la Clave")
+
     private String confirmPassword;
 
 
@@ -61,7 +77,8 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getLastName() { return lastName;
+    public String getLastName() {
+        return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -107,7 +124,6 @@ public class User {
     public void setRoles(String roles) {
         this.roles = roles;
     }
-
 
 
     @ManyToMany(fetch = FetchType.LAZY)
