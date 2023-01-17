@@ -29,8 +29,9 @@ public class User {
     @Email(message = "Ingrese una dirección de correo válida")
     private String email;
 
-    @Column(unique = true)
+    @Column(unique = true,length = 60)
     @NotBlank(message = "Ingrese el Nombre de Usuario")
+
     private String username;
 
     @Column
