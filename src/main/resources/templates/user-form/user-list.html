@@ -19,10 +19,27 @@
             <td th:text="${user.email}"></td>
             <td>
                 <a href="#" th:href="@{'/editUser/'+ ${user.id}}"><i class="fas fa-edit"></i></a>
-                | <a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i
-                    class="fas fa-user-times"></i></a>
+            </td>
+            <td>
+                <-a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i class="fas fa-user-times"></i></a>
+                <!--a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.username} +'\');'"><i class="fas fa-user-times"></i></a-->
             </td>
         </tr>
         </tbody>
     </table>
+    <div class="alert-danger  text-center " th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error Message
+    </div>
 </div>
+
+<script type="text/javascript">
+    function confirmDelete(theName) {
+        $('#deleteModal').modal('show');
+        $("#userIdHiddenInput").val(id);
+        //$("#userNameInput").val(theName);
+    }
+
+    function deleteUser() {
+        var id = $("#userIdHiddenInput").val();
+        window.location = "deleteUser/" + id;
+    }
+</script>

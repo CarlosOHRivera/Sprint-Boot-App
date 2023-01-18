@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getUserById(Long id) throws Exception{
-       User user = userRepository.findById(id).orElseThrow(()->  new Exception("El usuario a Editar No Existe!!!"));
+       User user = userRepository.findById(id).orElseThrow(()->  new Exception("El usuario No Existe!!!"));
         return user;
     }
 
@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
         mapUser(fromUser, toUser);
         return userRepository.save(toUser);
     }
+
 
     /* Mapeamos todos los campos  excepto el password */
     protected void mapUser(User from,User to) {
@@ -67,4 +68,12 @@ public class UserServiceImpl implements UserService {
         to.setRoles(from.getRoles());
         to.setConfirmPassword(to.getPassword());// He colocado que sean iguales... para el caso de la edición... ya que de lo contrario da error por las validadciones que tiene en la Entity
     }
+    @Override
+    public void deleteUser(Long id) throws Exception {
+       /* User user=userRepository.findById(id).orElseThrow(()->new Exception("Usuario no encontrado para Ser Eliminado") );*
+        */
+        User user = getUserById(id);
+        userRepository.deleteById(id);
+    }
+
 }
