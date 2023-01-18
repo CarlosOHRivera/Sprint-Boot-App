@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService {
         return true;
     }
     private boolean checkPasswordValid(User user) throws Exception {
+        if (user.getConfirmPassword()== null || user.getConfirmPassword().isEmpty() ){
+            throw new Exception("Debe confirmar el PassWord");
+        }
+
         if (!user.getPassword().equals(user.getConfirmPassword())){
             throw new Exception("Password no se Confirma,digite de nuevo");
        }
@@ -48,4 +52,19 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public User updateUser(User fromUser) throws Exception {
+        User toUser = getUserById(fromUser.getId());
+        mapUser(fromUser, toUser);
+        return userRepository.save(toUser);
+    }
+
+    /* Mapeamos todos los campos  excepto el password */
+    protected void mapUser(User from,User to) {
+        to.setUsername(from.getUsername());
+        to.setFirstName(from.getFirstName());
+        to.setLastName(from.getLastName());
+        to.setEmail(from.getEmail());
+        to.setRoles(from.getRoles());
+        to.setConfirmPassword(to.getPassword());// He colocado que sean iguales... para el caso de la edición... ya que de lo contrario da error por las validadciones que tiene en la Entity
+    }
 }
