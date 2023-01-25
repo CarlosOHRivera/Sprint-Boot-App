@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(form.getId());
 
         if ( !user.getPassword().equals(form.getCurrentPassword())) {
-            throw new Exception ("Current Password invalido.");
+            throw new Exception ("Password actual NO válido.");
         }
 
         if( user.getPassword().equals(form.getNewPassword())) {
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if( !form.getNewPassword().equals(form.getConfirmPassword())) {
-            throw new Exception ("Nuevo Password y Current Password no coinciden.");
+            throw new Exception ("Nuevo Password y la Confirmación no coinciden.");
         }
 
         user.setPassword(form.getNewPassword());
