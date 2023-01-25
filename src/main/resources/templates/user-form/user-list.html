@@ -8,6 +8,7 @@
             <th scope="col">Username</th>
             <th scope="col">E-mail</th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -21,7 +22,7 @@
                 <a href="#" th:href="@{'/editUser/'+ ${user.id}}"><i class="fas fa-edit"></i></a>
             </td>
             <td>
-                <-a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i class="fas fa-user-times"></i></a>
+                <a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i class="fas fa-user-times"></i></a>
                 <!--a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.username} +'\');'"><i class="fas fa-user-times"></i></a-->
             </td>
         </tr>
@@ -32,7 +33,7 @@
 </div>
 
 <script type="text/javascript">
-    function confirmDelete(theName) {
+    function confirmDelete(id) {
         $('#deleteModal').modal('show');
         $("#userIdHiddenInput").val(id);
         //$("#userNameInput").val(theName);

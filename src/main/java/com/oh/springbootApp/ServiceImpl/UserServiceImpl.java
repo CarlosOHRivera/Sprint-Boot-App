@@ -3,6 +3,7 @@ package com.oh.springbootApp.ServiceImpl;
 import com.oh.springbootApp.Entity.User;
 import com.oh.springbootApp.Repository.UserRepository;
 import com.oh.springbootApp.Service.UserService;
+import com.oh.springbootApp.dto.ChangePasswordForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,6 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-
     private boolean chekUsernameAvailable(User user) throws Exception {
         Optional<User> userfound= userRepository.findByUsername(user.getUsername());
         if (userfound.isPresent()){
@@ -70,10 +70,28 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void deleteUser(Long id) throws Exception {
-       /* User user=userRepository.findById(id).orElseThrow(()->new Exception("Usuario no encontrado para Ser Eliminado") );*
-        */
         User user = getUserById(id);
         userRepository.deleteById(id);
     }
 
+    @Override
+    public User changePassword(ChangePasswordForm form) throws Exception {
+        User user = getUserById(form.getId());
+
+        if ( !user.getPassword().equals(form.getCurrentPassword())) {
+            throw new Exception ("Current Password invalido.");
+        }
+
+        if( user.getPassword().equals(form.getNewPassword())) {
+            throw new Exception ("Nuevo debe ser diferente al password actual.");
+        }
+
+        if( !form.getNewPassword().equals(form.getConfirmPassword())) {
+            throw new Exception ("Nuevo Password y Current Password no coinciden.");
+        }
+
+        user.setPassword(form.getNewPassword());
+        user.setConfirmPassword(form.getNewPassword());
+        return userRepository.save(user);
+    }
 }
