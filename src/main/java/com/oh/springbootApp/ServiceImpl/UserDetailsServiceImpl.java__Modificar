@@ -1,0 +1,45 @@
+package com.oh.springbootApp.ServiceImpl;
+
+import com.oh.springbootApp.Entity.Role;
+import com.oh.springbootApp.Entity.User;
+import com.oh.springbootApp.Repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
+@Transactional
+public class UserDetailsServiceImpl implements com.oh.springbootApp.Service.UserDetailsService {
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        //Buscar nombre de usuario en nuestra base de datos
+        com.oh.springbootApp.Entity.User appUser =
+                userRepository.findByUsername(username).orElseThrow(() ->
+                        new UsernameNotFoundException("Usuario Login Invalido!"));
+
+        Set<GrantedAuthority> grantList = new HashSet<GrantedAuthority>();
+
+        //Crear la lista de los roles/accessos que tienen el usuarios
+        for (Role role :   appUser.getRoles() ) {
+            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getDescription());
+            grantList.add(grantedAuthority);
+        }
+
+        //Crear y retornar Objeto de usuario soportado por Spring Security
+        UserDetails user = (UserDetails) new User(appUser.getUsername(), appUser.getPassword(), grantList);
+        return user;
+    }
+
+}

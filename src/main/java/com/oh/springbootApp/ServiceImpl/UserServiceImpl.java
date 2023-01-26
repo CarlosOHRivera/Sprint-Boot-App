@@ -95,3 +95,108 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 }
+/*
+*
+* public boolean isLoggedUserADMIN(){
+ return loggedUserHasRole("ROLE_ADMIN");
+}
+
+public boolean loggedUserHasRole(String role) {
+ Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+ UserDetails loggedUser = null;
+ Object roles = null;
+ if (principal instanceof UserDetails) {
+  loggedUser = (UserDetails) principal;
+
+  roles = loggedUser.getAuthorities().stream()
+    .filter(x -> role.equals(x.getAuthority() ))
+    .findFirst().orElse(null); //loggedUser = null;
+ }
+ return roles != null ?true :false;
+}
+* */
+/*
+*
+* Hola Cristian, revisando el código encontré una nueva novedad que si se mejora, podría servir mucho para todas las personas. Al momento de crear contraseñas nosotros ya las mandamos encriptadas, por tanto cuando tratas de comparar las mismas debemos verificar no con equals sino con matches. Coloco la solución para que cualquiera que la quiera implementar se guie (algunos nombres cambian con respecto a lo que hizo Cristian, porque yo los cambie adrede, pero la logica es igual)
+
+
+@Service
+public class UsuarioServiceImpl implements UsuarioService {
+
+ @Autowired
+ UsuarioRepository usuarioRepository;
+
+ @Autowired
+ BCryptPasswordEncoder bCryptPasswordEncoder;
+
+ @Autowired
+ PasswordEncoder passwordEncoder;
+
+
+
+
+
+
+@Override
+ public Usuario createUser(Usuario user) throws Exception {
+
+
+
+  BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+
+  if (checkUsernameAvailable(user) && checkPasswordValid(user) &&  checkEmailAvailable(user)) {
+
+   //modificar el password para que sea seguro
+   user.setContrasena(bCryptPasswordEncoder.encode(user.getContrasena()));
+           //modificar el password para que sea seguro
+           user = usuarioRepository.save(user);
+
+
+           }
+           return user;
+           }
+
+
+@Override
+public Usuario changePassword(ChangePasswordForm form) throws Exception {
+        Usuario user = getUserById(form.getId());
+
+
+
+
+        //encoder.matches("123456", passwd)
+
+        if ( !isLoggedUserADMIN() && ! passwordEncoder.matches(form.getCurrentPassword(), user.getContrasena())) {
+
+        throw new Exception ("Current Password invalido.");
+        }
+
+
+
+        if(passwordEncoder.matches(form.getNewPassword(), user.getContrasena())) {
+        throw new Exception ("Nuevo debe ser diferente al password actual.");
+        }
+
+        if( !form.getNewPassword().equals(form.getConfirmPassword())) {
+        throw new Exception ("Nuevo Password y Confirm Password no coinciden.");
+        }
+
+        String encodePassword = bCryptPasswordEncoder.encode(form.getNewPassword());
+        user.setContrasena(encodePassword);
+        return usuarioRepository.save(user);
+        }
+ */
+/*
+*
+* Buen día compañeros yo tuve muchos problemas para encriptar la contraseña desde el método crear, mi solución que en la clase UserService coloque la instancia
+BCryptPasswordEncoder  como:
+private final BCryptPasswordEncoder encoder;
+
+Luego la inicialice en un constructor de la clase:
+
+public UserService(){
+                      this.encoder = new BCryptPasswordEncoder();
+}
+
+Luego ya lo pude aplicar como lo indica Cristian, espero les ayude.
+* */

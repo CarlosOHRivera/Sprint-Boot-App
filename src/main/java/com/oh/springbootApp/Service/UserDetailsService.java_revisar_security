@@ -1,0 +1,10 @@
+package com.oh.springbootApp.Service;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+public interface UserDetailsService {
+    public default UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
+}
