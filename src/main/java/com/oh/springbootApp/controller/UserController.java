@@ -1,6 +1,7 @@
 package com.oh.springbootApp.controller;
 
 import com.oh.springbootApp.Entity.User;
+import com.oh.springbootApp.Exception.UsernameOrIdNotFound;
 import com.oh.springbootApp.Repository.RoleRepository;
 import com.oh.springbootApp.Service.UserService;
 import com.oh.springbootApp.dto.ChangePasswordForm;
@@ -115,8 +116,8 @@ public class UserController {
     public String deleteUser(Model model, @PathVariable(name="id")Long id) {
         try {
             userService.deleteUser(id);
-        } catch (Exception e) {
-            model.addAttribute("listErrorMessage",e.getMessage());
+        } catch (UsernameOrIdNotFound uoin) {
+            model.addAttribute("listErrorMessage",uoin.getMessage());
         }
         return "redirect:/userForm";  //Esto no funciono: getUserForm(model)
 
@@ -140,5 +141,3 @@ public class UserController {
         return ResponseEntity.ok("Success");
     }
 }
-
-

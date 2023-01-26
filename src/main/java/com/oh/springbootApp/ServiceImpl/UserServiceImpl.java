@@ -1,6 +1,7 @@
 package com.oh.springbootApp.ServiceImpl;
 
 import com.oh.springbootApp.Entity.User;
+import com.oh.springbootApp.Exception.UsernameOrIdNotFound;
 import com.oh.springbootApp.Repository.UserRepository;
 import com.oh.springbootApp.Service.UserService;
 import com.oh.springbootApp.dto.ChangePasswordForm;
@@ -47,8 +48,8 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    public User getUserById(Long id) throws Exception{
-       User user = userRepository.findById(id).orElseThrow(()->  new Exception("El usuario No Existe!!!"));
+    public User getUserById(Long id) throws UsernameOrIdNotFound{
+       User user = userRepository.findById(id).orElseThrow(()->  new UsernameOrIdNotFound("El Id de usuario No Existe!!!"));
         return user;
     }
 
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
         to.setConfirmPassword(to.getPassword());// He colocado que sean iguales... para el caso de la edición... ya que de lo contrario da error por las validadciones que tiene en la Entity
     }
     @Override
-    public void deleteUser(Long id) throws Exception {
+    public void deleteUser(Long id) throws UsernameOrIdNotFound {
         User user = getUserById(id);
         userRepository.deleteById(id);
     }
